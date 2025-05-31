@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BdCore } from '../config/types.config';
+import { PostgresqlDBType } from '../config/types.config';
 
 @Module({
   imports: [
@@ -9,11 +9,11 @@ import { BdCore } from '../config/types.config';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        host: config.get<BdCore>('bdCore').host,
-        port: config.get<BdCore>('bdCore').port,
-        database: config.get<BdCore>('bdCore').database,
-        username: config.get<BdCore>('bdCore').username,
-        password: config.get<BdCore>('bdCore').password,
+        host: config.get<PostgresqlDBType>('postgresqlDB').host,
+        port: config.get<PostgresqlDBType>('postgresqlDB').port,
+        database: config.get<PostgresqlDBType>('postgresqlDB').database,
+        username: config.get<PostgresqlDBType>('postgresqlDB').username,
+        password: config.get<PostgresqlDBType>('postgresqlDB').password,
         autoLoadEntities: true,
         synchronize: false, // NO TOCAR !
       }),

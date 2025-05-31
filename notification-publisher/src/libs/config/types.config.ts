@@ -1,12 +1,18 @@
 export interface EnvConfigurationType {
   environment: string;
-  bdCore: BdCore;
+  postgresqlDB: PostgresqlDBType;
+  mongoDB: MongoDBType;
 }
 
-export interface BdCore {
+export interface PostgresqlDBType {
   host: string;
   port: number;
   database: string;
   username: string;
   password: string;
+}
+
+export interface MongoDBType {
+  uri: string;
+  database: string;
 }

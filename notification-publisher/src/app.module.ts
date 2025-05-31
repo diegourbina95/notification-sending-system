@@ -4,12 +4,13 @@ import { ConfigModule } from '@nestjs/config';
 
 /* LIBRARY IMPORTS */
 import { EnvConfiguration } from '@src/libs/config/env.config';
-//import { PostgreModule } from '@src/libs/database/postgre.module';
+import { PostgreModule } from '@src/libs/database/postgre.module';
 import { AxiosModule } from '@src/libs/axios/axios.module';
+import { MongooseModule } from '@src/libs/database/mongo.module';
 
 /* MODULES IMPORTS */
 import { configSchema } from '@src/libs/config/config.schema';
-import { KeynuaModule } from '@src/modules/keynua/keynua.module';
+import { SmsModule } from '@src/modules/sms/sms.module';
 
 @Module({
   imports: [
@@ -19,11 +20,12 @@ import { KeynuaModule } from '@src/modules/keynua/keynua.module';
       validationSchema: configSchema,
       isGlobal: true,
     }),
-    //PostgreModule,
+    PostgreModule,
+    MongooseModule,
     AxiosModule,
 
     /* Modules */
-    KeynuaModule,
+    SmsModule,
   ],
   controllers: [],
   providers: [],
