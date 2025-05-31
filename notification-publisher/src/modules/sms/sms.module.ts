@@ -14,9 +14,23 @@ import {
 } from '@src/modules/sms/entities/send-sms.entity';
 import { MessageEntity } from '@src/modules/sms/entities/message.entity';
 import { CamapaignEntity } from './entities/campaign.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
+    ClientsModule.register([
+      {
+        name: 'SMS_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://localhost:5672'],
+          queue: 'cats_queue',
+          queueOptions: {
+            durable: false,
+          },
+        },
+      },
+    ]),
     TypeOrmModule.forFeature([CamapaignEntity, MessageEntity]),
     MongooseModule.forFeature([
       {
