@@ -1,6 +1,17 @@
 /* NESTJS IMPORTS */
-import { Controller, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpException,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
+import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { SmsService } from '@src/modules/sms/sms.service';
+import {
+  SendCampaignDto,
+  SendCampaignResponseDto,
+} from './dtos/send-campaign.dto';
 /* import { ControllerResponse } from '@src/modules/shared/interface/controller-response.interface'; */
 
 /* LIBRARY IMPORTS */
@@ -9,20 +20,31 @@ import { SmsService } from '@src/modules/sms/sms.service';
 
 @Controller({
   path: 'sms',
-  version: '1', // estructura del path: /v1/keynua/
+  version: '1',
 })
 export class SmsController {
   constructor(private readonly smsService: SmsService) {}
 
-  @Get('test')
-  async testController(): Promise<any> {
+  @ApiOperation({ summary: 'API para enviar mensajes por campaña' })
+  @ApiOkResponse({
+    description: 'Respuesta de solicitud',
+    type: SendCampaignResponseDto,
+  })
+  @Post('campaign')
+  async sendCampaign(@Body() sendCampaignDto: SendCampaignDto): Promise<any> {
     try {
-      return await this.smsService.test();
+      return await this.smsService.sendCampaign(sendCampaignDto);
     } catch (error) {
-      return {
-        responseCode: '99',
-        message: 'Error Interno',
-      };
+      throw new HttpException(
+        {
+          responseCode: '99',
+          message: error.message || 'Internal Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: error,
+        },
+      );
     }
   }
 }

@@ -2,6 +2,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 /* LIBRARY IMPORTS */
 
@@ -14,21 +16,25 @@ import {
 } from '@src/modules/sms/entities/send-sms.entity';
 import { MessageEntity } from '@src/modules/sms/entities/message.entity';
 import { CamapaignEntity } from './entities/campaign.entity';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { RabbitMQType } from '@src/libs/config/types.config';
 
 @Module({
   imports: [
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'SMS_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: ['amqp://localhost:5672'],
-          queue: 'cats_queue',
-          queueOptions: {
-            durable: false,
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<RabbitMQType>('rabbitMQ').uri],
+            queue: configService.get<RabbitMQType>('rabbitMQ').queue,
+            queueOptions: {
+              durable: true,
+            },
           },
-        },
+        }),
       },
     ]),
     TypeOrmModule.forFeature([CamapaignEntity, MessageEntity]),

@@ -13,7 +13,7 @@ export class MessageEntity {
     type: 'varchar',
     nullable: true,
   })
-  noMensaje?: string;
+  messageDetail?: string;
 
   @Column({
     name: 'celular',

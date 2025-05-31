@@ -13,4 +13,9 @@ export const EnvConfiguration = (): EnvConfigurationType => ({
     uri: process.env.MONGO_DB_URI,
     database: process.env.MONGO_DB_NAME,
   },
+  batchSize: +process.env.BATCH_SIZE,
+  rabbitMQ: {
+    uri: process.env.RABBIT_MQ_URI,
+    queue: process.env.RABBIT_MQ_QUEUE,
+  },
 });
