@@ -16,7 +16,7 @@ import { SendCampaignDto } from './dtos/send-campaign.dto';
 import { SmsEvents } from './enums';
 import { MessageEntity } from './entities/message.entity';
 import { ConfigService } from '@nestjs/config';
-import { SendSmsEntity } from './entities/send-sms.entity';
+import { SmsPublisherLogEntity } from './entities/sms-publisher-log.entity';
 
 @Injectable()
 export class SmsService {
@@ -26,8 +26,8 @@ export class SmsService {
     private readonly configService: ConfigService,
     @InjectRepository(MessageEntity)
     private readonly messageRepository: Repository<MessageEntity>,
-    @InjectModel(SendSmsEntity.name)
-    private readonly sendSmsModel: Model<SendSmsEntity>,
+    @InjectModel(SmsPublisherLogEntity.name)
+    private readonly sendSmsModel: Model<SmsPublisherLogEntity>,
     @Inject('SMS_SERVICE')
     private client: ClientProxy,
   ) {}
@@ -42,7 +42,10 @@ export class SmsService {
 
     while (true) {
       const chunk = await this.messageRepository.find({
-        select: ['messageCode', 'messageDetail', 'phoneNumber'],
+        select: ['messageCode', 'messageDetail', 'phoneNumber', 'campaignCode'],
+        where: {
+          campaignCode: sendCampaignDto.campaignCode,
+        },
         take: batchSize,
         skip: offset,
       });
@@ -70,9 +73,9 @@ export class SmsService {
     try {
       const promiseList = arrayMessage.map(async (message) => {
         const processId = uuidv4();
-
         const payload = {
           processId,
+          campaignCode: message.campaignCode,
           messageCode: message.messageCode,
           messageDetail: message.messageDetail,
           messageProvider,

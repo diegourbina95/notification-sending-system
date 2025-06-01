@@ -11,11 +11,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SmsController } from '@src/modules/sms/sms.controller';
 import { SmsService } from '@src/modules/sms/sms.service';
 import {
-  SendSmsEntity,
-  SendSmsSchema,
-} from '@src/modules/sms/entities/send-sms.entity';
+  SmsPublisherLogEntity,
+  SmsPublisherLogSchema,
+} from '@src/modules/sms/entities/sms-publisher-log.entity';
 import { MessageEntity } from '@src/modules/sms/entities/message.entity';
-import { CamapaignEntity } from './entities/campaign.entity';
+import { CampaignEntity } from './entities/campaign.entity';
 import { RabbitMQType } from '@src/libs/config/types.config';
 
 @Module({
@@ -37,11 +37,11 @@ import { RabbitMQType } from '@src/libs/config/types.config';
         }),
       },
     ]),
-    TypeOrmModule.forFeature([CamapaignEntity, MessageEntity]),
+    TypeOrmModule.forFeature([CampaignEntity, MessageEntity]),
     MongooseModule.forFeature([
       {
-        name: SendSmsEntity.name,
-        schema: SendSmsSchema,
+        name: SmsPublisherLogEntity.name,
+        schema: SmsPublisherLogSchema,
       },
     ]),
   ],

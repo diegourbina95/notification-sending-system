@@ -1,12 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity({ name: 'tbcampana', schema: 'sms' })
-export class CamapaignEntity {
+export class CampaignEntity {
   @PrimaryGeneratedColumn({
     name: 'co_tbcamp',
     type: 'integer',
   })
-  capaignCode: number;
+  campaignCode: number;
 
   @Column({
     name: 'no_camp',

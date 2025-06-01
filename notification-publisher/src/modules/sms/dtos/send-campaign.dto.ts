@@ -1,22 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber } from 'class-validator';
+import { PROVIDER_TYPES, ProviderTypes } from '../types';
 
 export class SendCampaignDto {
   @ApiProperty({
-    example: '33000019',
+    example: 2,
     description: 'Codigo de campaña',
   })
   @IsNotEmpty()
-  @IsString()
-  campaignCode: string;
+  @IsNumber()
+  campaignCode: number;
 
   @ApiProperty({
-    example: 'SMS_INFOBIP',
+    example: 'SMS_SOLUCIONES',
     description: 'Codigo de campaña',
   })
   @IsNotEmpty()
-  @IsString()
-  messageProvider: string;
+  @IsIn(PROVIDER_TYPES)
+  messageProvider: ProviderTypes;
 }
 export class SendCampaignResponseDto {
   @ApiProperty({
