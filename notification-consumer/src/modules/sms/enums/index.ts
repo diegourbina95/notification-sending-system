@@ -1,8 +1,7 @@
 export enum SmsStatus {
   Pending = 0,
-  Published = 1,
-  Processed = 2,
-  Failed = 3,
+  Sent = 1,
+  Failed = 2,
 }
 
 export enum SmsEvents {

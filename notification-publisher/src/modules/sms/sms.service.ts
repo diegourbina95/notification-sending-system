@@ -13,7 +13,7 @@ import { Model } from 'mongoose';
 /* MODULES IMPORTS */
 import { ControllerResponse } from '../shared/interface/controller-response.interface';
 import { SendCampaignDto } from './dtos/send-campaign.dto';
-import { SmsEvents } from './enums';
+import { SmsEvents, SmsStatus } from './enums';
 import { MessageEntity } from './entities/message.entity';
 import { ConfigService } from '@nestjs/config';
 import { SmsPublisherLogEntity } from './entities/sms-publisher-log.entity';
@@ -45,6 +45,7 @@ export class SmsService {
         select: ['messageCode', 'messageDetail', 'phoneNumber', 'campaignCode'],
         where: {
           campaignCode: sendCampaignDto.campaignCode,
+          processStatus: SmsStatus.Pending,
         },
         take: batchSize,
         skip: offset,
@@ -82,9 +83,13 @@ export class SmsService {
           phoneNumber: message.phoneNumber,
         };
 
-        await this.sendSmsModel.create(payload);
-
         this.client.emit(SmsEvents.SendSms, payload);
+
+        await this.sendSmsModel.create(payload);
+        await this.messageRepository.update(
+          { messageCode: message.messageCode },
+          { processStatus: SmsStatus.Published },
+        );
       });
 
       await Promise.all(promiseList);
