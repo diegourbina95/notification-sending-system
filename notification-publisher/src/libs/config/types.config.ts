@@ -2,6 +2,8 @@ export interface EnvConfigurationType {
   environment: string;
   postgresqlDB: PostgresqlDBType;
   mongoDB: MongoDBType;
+  batchSize: number;
+  rabbitMQ: RabbitMQType;
 }
 
 export interface PostgresqlDBType {
@@ -15,4 +17,9 @@ export interface PostgresqlDBType {
 export interface MongoDBType {
   uri: string;
   database: string;
+}
+
+export interface RabbitMQType {
+  uri: string;
+  queue: string;
 }

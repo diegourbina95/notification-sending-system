@@ -13,7 +13,7 @@ export class MessageEntity {
     type: 'varchar',
     nullable: true,
   })
-  noMensaje?: string;
+  messageDetail?: string;
 
   @Column({
     name: 'celular',
@@ -27,7 +27,7 @@ export class MessageEntity {
     type: 'smallint',
     nullable: true,
   })
-  coTbcamp?: number;
+  campaignCode?: number;
 
   @Column({
     name: 'fe_envio',
@@ -42,7 +42,7 @@ export class MessageEntity {
     default: 0,
     nullable: true,
   })
-  std?: number;
+  processStatus?: number;
 
   @Column({ name: 'no_dato1', type: 'varchar', nullable: true })
   data1?: string;
