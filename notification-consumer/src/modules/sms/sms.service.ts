@@ -14,6 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { SmsConsumerLogEntity } from './entities/sms-consumer-log.entity';
 import { CallSmsProviderDto } from './dtos/call-sms-provider';
 import { ProviderTypes } from './types';
+import { SmsStatus } from './enums';
 
 @Injectable()
 export class SmsService {
@@ -40,6 +41,10 @@ export class SmsService {
         ...callSmsProviderDto,
         providerResponse,
       });
+      await this.messageRepository.update(
+        { messageCode: callSmsProviderDto.messageCode },
+        { processStatus: SmsStatus.Processed },
+      );
     } catch (error) {
       this.logger.error(
         `Error in callSmsProvider: ${error.message}`,
@@ -49,6 +54,10 @@ export class SmsService {
         callSmsProviderDto,
         providerResponse: error.message,
       });
+      await this.messageRepository.update(
+        { messageCode: callSmsProviderDto.messageCode },
+        { processStatus: SmsStatus.Failed },
+      );
       throw error;
     }
   }
