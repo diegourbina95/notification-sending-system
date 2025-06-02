@@ -11,4 +11,7 @@ export const configSchema = Joi.object({
   MONGO_DB_NAME: Joi.required(),
   RABBIT_MQ_URI: Joi.required(),
   RABBIT_MQ_QUEUE: Joi.required(),
+  SOLUCIONES_URL_BASE: Joi.required(),
+  SOLUCIONES_USERNAME: Joi.required(),
+  SOLUCIONES_PASSWORD: Joi.required(),
 });

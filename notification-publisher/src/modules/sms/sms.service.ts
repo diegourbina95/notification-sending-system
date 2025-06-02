@@ -45,7 +45,7 @@ export class SmsService {
         select: ['messageCode', 'messageDetail', 'phoneNumber', 'campaignCode'],
         where: {
           campaignCode: sendCampaignDto.campaignCode,
-          processStatus: SmsStatus.Pending,
+          /* processStatus: SmsStatus.Pending, */
         },
         take: batchSize,
         skip: offset,

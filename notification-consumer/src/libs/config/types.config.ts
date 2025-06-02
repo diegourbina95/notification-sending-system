@@ -3,6 +3,7 @@ export interface EnvConfigurationType {
   postgresqlDB: PostgresqlDBType;
   mongoDB: MongoDBType;
   rabbitMQ: RabbitMQType;
+  soluciones: SolucionesType;
 }
 
 export interface PostgresqlDBType {
@@ -21,4 +22,10 @@ export interface MongoDBType {
 export interface RabbitMQType {
   uri: string;
   queue: string;
+}
+
+export interface SolucionesType {
+  baseUrl: string;
+  username: string;
+  password: string;
 }

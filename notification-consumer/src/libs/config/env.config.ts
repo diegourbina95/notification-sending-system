@@ -17,4 +17,9 @@ export const EnvConfiguration = (): EnvConfigurationType => ({
     uri: process.env.RABBIT_MQ_URI,
     queue: process.env.RABBIT_MQ_QUEUE,
   },
+  soluciones: {
+    baseUrl: process.env.SOLUCIONES_URL_BASE,
+    username: process.env.SOLUCIONES_USERNAME,
+    password: process.env.SOLUCIONES_PASSWORD,
+  },
 });
