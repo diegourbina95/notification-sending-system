@@ -60,9 +60,6 @@ export class SmsService {
         { messageCode: callSmsProviderDto.messageCode },
         { processStatus: SmsStatus.Processed, sendDate: new Date() },
       );
-      this.logger.log(
-        `Message with code ${callSmsProviderDto.messageCode} processed successfully`,
-      );
     } catch (error) {
       this.logger.error(
         `Error in callSmsProvider: ${error.message}`,
