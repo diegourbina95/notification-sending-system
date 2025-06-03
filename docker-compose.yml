@@ -30,7 +30,6 @@ services:
     build:
       context: ./notification-publisher
       dockerfile: Dockerfile
-    container_name: notification_publisher
     ports:
       - ${PORT}:5000
     depends_on:
@@ -55,12 +54,13 @@ services:
     build:
       context: ./notification-consumer
       dockerfile: Dockerfile
-    container_name: notification_consumer
     depends_on:
       - mongodb
       - rabbitmq
     networks:
       - app-network
+    deploy:
+      replicas: 1
     environment:
       ENVIRONMENT: ${ENVIRONMENT}
       BD_CORE_HOST: ${BD_CORE_HOST}
