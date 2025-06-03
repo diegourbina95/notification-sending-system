@@ -82,14 +82,12 @@ export class SmsService {
           messageProvider,
           phoneNumber: message.phoneNumber,
         };
-
-        this.client.emit(SmsEvents.SendSms, payload);
-
-        await this.sendSmsModel.create(payload);
         await this.messageRepository.update(
           { messageCode: message.messageCode },
           { processStatus: SmsStatus.Published },
         );
+        await this.sendSmsModel.create(payload);
+        this.client.emit(SmsEvents.SendSms, payload);
       });
 
       await Promise.all(promiseList);
