@@ -11,6 +11,7 @@ import { MongooseModule } from '@src/libs/database/mongo.module';
 /* MODULES IMPORTS */
 import { configSchema } from '@src/libs/config/config.schema';
 import { SmsModule } from '@src/modules/sms/sms.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -26,6 +27,8 @@ import { SmsModule } from '@src/modules/sms/sms.module';
 
     /* Modules */
     SmsModule,
+
+    SeedModule,
   ],
   controllers: [],
   providers: [],
