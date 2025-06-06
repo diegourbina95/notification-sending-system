@@ -103,7 +103,6 @@ docker-compose up --build
 
 - **API Documentation**: http://localhost:5000/api
 - **Publisher Service**: Puerto 5000
-- **Consumer Service**: Puerto 3000
 - **MongoDB**: Puerto 27017
 - **RabbitMQ Management**: Puerto 15672
 
