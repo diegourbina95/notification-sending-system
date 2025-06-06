@@ -6,7 +6,7 @@ import { Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 /* LIBRARY IMPORTS */
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 
@@ -56,7 +56,12 @@ export class SmsService {
       this.logger.warn(
         `Enviando chunk ${idxChunk} de mensajes, cantidad: ${chunk.length}`,
       );
-      await this.processSms(chunk, sendCampaignDto.messageProvider);
+
+      await this.processSms(
+        chunk,
+        sendCampaignDto.messageProvider,
+        sendCampaignDto.campaignCode,
+      );
 
       offset += batchSize;
       idxChunk++;
@@ -70,8 +75,16 @@ export class SmsService {
   async processSms(
     arrayMessage: any[],
     messageProvider: string,
+    campaignCode: number,
   ): Promise<void> {
     try {
+      const messageCodesToUpdate = arrayMessage.map((msg) => msg.messageCode);
+
+      await this.messageRepository.update(
+        { campaignCode, messageCode: In(messageCodesToUpdate) },
+        { processStatus: SmsStatus.Published },
+      );
+
       const promiseList = arrayMessage.map(async (message) => {
         const processId = uuidv4();
         const payload = {
@@ -82,10 +95,6 @@ export class SmsService {
           messageProvider,
           phoneNumber: message.phoneNumber,
         };
-        await this.messageRepository.update(
-          { messageCode: message.messageCode },
-          { processStatus: SmsStatus.Published },
-        );
         await this.sendSmsModel.create(payload);
         this.client.emit(SmsEvents.SendSms, payload);
       });
