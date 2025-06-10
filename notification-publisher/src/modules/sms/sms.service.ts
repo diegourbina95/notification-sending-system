@@ -6,7 +6,7 @@ import { Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 /* LIBRARY IMPORTS */
-import { In, Repository } from 'typeorm';
+import { In, MoreThan, Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 
@@ -35,8 +35,8 @@ export class SmsService {
   async sendCampaign(
     sendCampaignDto: SendCampaignDto,
   ): Promise<ControllerResponse> {
-    let offset = 0;
     let idxChunk = 1;
+    let lastMessageId = 0;
 
     const batchSize = this.configService.get<number>('batchSize');
 
@@ -46,9 +46,10 @@ export class SmsService {
         where: {
           campaignCode: sendCampaignDto.campaignCode,
           processStatus: SmsStatus.Pending,
+          messageCode: MoreThan(lastMessageId),
         },
+        order: { messageCode: 'ASC' },
         take: batchSize,
-        skip: offset,
       });
 
       if (chunk.length === 0) break;
@@ -63,7 +64,7 @@ export class SmsService {
         sendCampaignDto.campaignCode,
       );
 
-      offset += batchSize;
+      lastMessageId = chunk[chunk.length - 1].messageCode;
       idxChunk++;
     }
     return {
