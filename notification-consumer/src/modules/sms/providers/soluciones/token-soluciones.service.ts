@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthSolucionesResponseDto } from './dtos/auth-soluciones.dto';
+import { AuthSolucionesResponseDto } from '../../dtos/auth-soluciones.dto';
 import { AxiosService } from '@src/libs/axios/axios.service';
 import { SolucionesType } from '@src/libs/config/types.config';
 
