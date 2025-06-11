@@ -14,7 +14,8 @@ import {
 } from '@src/modules/sms/entities/sms-consumer-log.entity';
 import { MessageEntity } from '@src/modules/sms/entities/message.entity';
 import { CampaignEntity } from './entities/campaign.entity';
-import { TokenSolucionesService } from './token-soluciones.service';
+import { TokenSolucionesService } from './providers/soluciones/token-soluciones.service';
+import { SolucionesService } from './providers/soluciones/soluciones.service';
 
 @Module({
   imports: [
@@ -27,6 +28,6 @@ import { TokenSolucionesService } from './token-soluciones.service';
     ]),
   ],
   controllers: [SmsController],
-  providers: [SmsService, TokenSolucionesService],
+  providers: [SmsService, TokenSolucionesService, SolucionesService],
 })
 export class SmsModule {}
