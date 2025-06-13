@@ -32,18 +32,18 @@ export class SmsService {
 
   async callSmsProvider(callSmsProviderDto: CallSmsProviderDto): Promise<void> {
     try {
-      const providerResponse = await this.handleProvider(
+      /* const providerResponse = await this.handleProvider(
         callSmsProviderDto.messageProvider,
         {
           processId: callSmsProviderDto.processId,
           message: callSmsProviderDto.messageDetail,
           phoneNumber: callSmsProviderDto.phoneNumber,
         },
-      );
-      /* const providerResponse = {
+      ); */
+      const providerResponse = {
         status: 'success',
         message: 'Message sent successfully',
-      }; */
+      };
       await this.smsConsumerLogModel.create({
         ...callSmsProviderDto,
         providerResponse: {
@@ -52,7 +52,7 @@ export class SmsService {
         },
       });
       await this.messageRepository.update(
-        { messageCode: callSmsProviderDto.messageCode },
+        { processId: callSmsProviderDto.processId },
         { processStatus: SmsStatus.Processed, sendDate: new Date() },
       );
     } catch (error) {

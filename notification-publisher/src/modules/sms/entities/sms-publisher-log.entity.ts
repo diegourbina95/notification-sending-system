@@ -10,9 +10,6 @@ export class SmsPublisherLogEntity extends Document {
   campaignCode: number;
 
   @Prop({ required: true })
-  messageCode: number;
-
-  @Prop({ required: true })
   messageDetail: string;
 
   @Prop({ required: true })
