@@ -4,6 +4,7 @@ import { MessageEntity } from '@src/modules/sms/entities/message.entity';
 import { SmsStatus } from '@src/modules/sms/enums';
 import { Repository } from 'typeorm';
 import { PopulateByCampaignDto } from './dtos/populate-by-campaign.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class SeedService {
@@ -20,6 +21,7 @@ export class SeedService {
     const messages = Array.from(
       { length: populateByCampaignDto.size },
       (_, index) => ({
+        processId: uuidv4(),
         messageDetail: `Message detail ${index}`,
         phoneNumber: populateByCampaignDto.phoneNumber,
         campaignCode: populateByCampaignDto.campaignCode,

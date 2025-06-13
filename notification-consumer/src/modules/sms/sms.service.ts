@@ -52,7 +52,7 @@ export class SmsService {
         },
       });
       await this.messageRepository.update(
-        { messageCode: callSmsProviderDto.messageCode },
+        { processId: callSmsProviderDto.processId },
         { processStatus: SmsStatus.Processed, sendDate: new Date() },
       );
     } catch (error) {

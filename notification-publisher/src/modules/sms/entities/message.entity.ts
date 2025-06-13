@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 
 @Entity({ name: 'tbmensaje', schema: 'sms' })
 export class MessageEntity {
@@ -8,31 +8,38 @@ export class MessageEntity {
   })
   messageCode: number;
 
+  @Index('uq_process_id', ['processId'], { unique: true })
+  @Column({
+    name: 'process_id',
+    type: 'uuid',
+  })
+  processId?: string;
+
   @Column({
     name: 'no_mensaje',
     type: 'varchar',
-    nullable: true,
+    nullable: false,
   })
   messageDetail?: string;
 
   @Column({
     name: 'celular',
     type: 'varchar',
-    nullable: true,
+    nullable: false,
   })
   phoneNumber?: string;
 
   @Column({
     name: 'co_tbcamp',
     type: 'smallint',
-    nullable: true,
+    nullable: false,
   })
   campaignCode?: number;
 
   @Column({
     name: 'fe_envio',
     type: 'timestamp',
-    nullable: true,
+    nullable: false,
   })
   sendDate?: Date;
 
@@ -40,7 +47,7 @@ export class MessageEntity {
     name: 'std',
     type: 'smallint',
     default: 0,
-    nullable: true,
+    nullable: false,
   })
   processStatus?: number;
 

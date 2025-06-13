@@ -12,16 +12,16 @@ export class CampaignEntity {
     name: 'no_camp',
     type: 'varchar',
     length: 100,
-    nullable: true, // Asumimos que puede ser null
+    nullable: false,
   })
-  campaignName?: string;
+  campaignName: string;
 
   @Column({
     name: 'fe_ini',
     type: 'timestamp',
-    nullable: true,
+    nullable: false,
   })
-  startDate?: Date;
+  startDate: Date;
 
   @Column({
     name: 'fe_fin',
