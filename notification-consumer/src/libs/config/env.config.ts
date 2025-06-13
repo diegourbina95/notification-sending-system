@@ -22,4 +22,8 @@ export const EnvConfiguration = (): EnvConfigurationType => ({
     username: process.env.SOLUCIONES_USERNAME,
     password: process.env.SOLUCIONES_PASSWORD,
   },
+  sinapsis: {
+    baseUrl: process.env.SINAPSIS_URL_BASE,
+    authorization: process.env.SINAPSIS_AUTHORIZATION,
+  },
 });

@@ -51,7 +51,6 @@ export class SmsService {
         order: { messageCode: 'ASC' },
         take: batchSize,
       });
-
       if (chunk.length === 0) break;
 
       this.logger.warn(
@@ -67,6 +66,13 @@ export class SmsService {
       lastMessageId = chunk[chunk.length - 1].messageCode;
       idxChunk++;
     }
+
+    if (lastMessageId === 0)
+      return {
+        responseCode: '01',
+        message: 'No se encontraron mensajes pendientes para la campaña',
+      };
+
     return {
       responseCode: '00',
       message: 'Camapaña enviada a procesar correctamente',

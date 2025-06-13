@@ -1,23 +1,14 @@
 /* NESTJS IMPORTS */
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
 
 /* LIBRARY IMPORTS */
-import { Repository } from 'typeorm';
-import { Model } from 'mongoose';
-
-/* MODULES IMPORTS */
-import { MessageEntity } from '../../entities/message.entity';
-import { ConfigService } from '@nestjs/config';
-import { SmsConsumerLogEntity } from '../../entities/sms-consumer-log.entity';
-import { CallSmsProviderDto } from '../../dtos/call-sms-provider';
-import { ProviderTypes } from '../../types';
-import { SmsStatus } from '../../enums';
-import { TokenSolucionesService } from '../../providers/soluciones/token-soluciones.service';
 import { AxiosService } from '@src/libs/axios/axios.service';
 import { SolucionesType } from '@src/libs/config/types.config';
+
+/* MODULES IMPORTS */
+import { TokenSolucionesService } from '../../providers/soluciones/token-soluciones.service';
 import { solucionesOrigin } from '../../constants';
 
 @Injectable()
@@ -27,10 +18,6 @@ export class SolucionesService {
 
   constructor(
     private readonly configService: ConfigService,
-    @InjectRepository(MessageEntity)
-    private readonly messageRepository: Repository<MessageEntity>,
-    @InjectModel(SmsConsumerLogEntity.name)
-    private readonly smsConsumerLogModel: Model<SmsConsumerLogEntity>,
     private readonly tokenSolucionesService: TokenSolucionesService,
     private readonly http: AxiosService,
   ) {
