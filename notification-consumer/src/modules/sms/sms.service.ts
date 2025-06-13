@@ -10,51 +10,46 @@ import { Model } from 'mongoose';
 
 /* MODULES IMPORTS */
 import { MessageEntity } from './entities/message.entity';
-import { ConfigService } from '@nestjs/config';
 import { SmsConsumerLogEntity } from './entities/sms-consumer-log.entity';
 import { CallSmsProviderDto } from './dtos/call-sms-provider';
 import { ProviderTypes } from './types';
 import { SmsStatus } from './enums';
-import { TokenSolucionesService } from './providers/soluciones/token-soluciones.service';
-import { AxiosService } from '@src/libs/axios/axios.service';
-import { SolucionesType } from '@src/libs/config/types.config';
-import { solucionesOrigin } from './constants';
 import { SolucionesService } from './providers/soluciones/soluciones.service';
+import { SinapsisService } from './providers/sinapsis/sinapsis.service';
 
 @Injectable()
 export class SmsService {
   private readonly logger = new Logger(SmsService.name);
-  private readonly environmentSoluciones: SolucionesType;
 
   constructor(
-    private readonly configService: ConfigService,
     @InjectRepository(MessageEntity)
     private readonly messageRepository: Repository<MessageEntity>,
     @InjectModel(SmsConsumerLogEntity.name)
     private readonly smsConsumerLogModel: Model<SmsConsumerLogEntity>,
     private readonly solucionesService: SolucionesService,
-  ) {
-    this.environmentSoluciones =
-      this.configService.get<SolucionesType>('soluciones');
-  }
+    private readonly sinapsisService: SinapsisService,
+  ) {}
 
   async callSmsProvider(callSmsProviderDto: CallSmsProviderDto): Promise<void> {
     try {
-      /* const providerResponse = await this.handleProvider(
+      const providerResponse = await this.handleProvider(
         callSmsProviderDto.messageProvider,
         {
           processId: callSmsProviderDto.processId,
           message: callSmsProviderDto.messageDetail,
           phoneNumber: callSmsProviderDto.phoneNumber,
         },
-      ); */
-      const providerResponse = {
+      );
+      /* const providerResponse = {
         status: 'success',
         message: 'Message sent successfully',
-      };
+      }; */
       await this.smsConsumerLogModel.create({
         ...callSmsProviderDto,
-        providerResponse,
+        providerResponse: {
+          status: 'OK',
+          details: providerResponse,
+        },
       });
       await this.messageRepository.update(
         { messageCode: callSmsProviderDto.messageCode },
@@ -67,7 +62,10 @@ export class SmsService {
       );
       await this.smsConsumerLogModel.create({
         ...callSmsProviderDto,
-        providerResponse: error.message,
+        providerResponse: {
+          status: 'ERROR',
+          details: error?.response?.data || 'Error in callSmsProvider',
+        },
       });
       await this.messageRepository.update(
         { messageCode: callSmsProviderDto.messageCode },
@@ -82,8 +80,10 @@ export class SmsService {
     smsPayload: { processId: string; message: string; phoneNumber: string },
   ): Promise<{ status: string; message: any }> {
     switch (provider) {
-      case 'SMS_SOLUCIONES':
+      case 'SOLUCIONES':
         return await this.solucionesService.handleProvider(smsPayload);
+      case 'SINAPSIS':
+        return await this.sinapsisService.handleProvider(smsPayload);
       default:
         this.logger.error(`Provider ${provider} not implemented`);
         return {

@@ -14,4 +14,6 @@ export const configSchema = Joi.object({
   SOLUCIONES_URL_BASE: Joi.required(),
   SOLUCIONES_USERNAME: Joi.required(),
   SOLUCIONES_PASSWORD: Joi.required(),
+  SINAPSIS_URL_BASE: Joi.required(),
+  SINAPSIS_AUTHORIZATION: Joi.required(),
 });

@@ -12,7 +12,7 @@ export class SendCampaignDto {
   campaignCode: number;
 
   @ApiProperty({
-    example: 'SMS_SOLUCIONES',
+    example: 'SOLUCIONES',
     description: 'Codigo de campaña',
   })
   @IsNotEmpty()
